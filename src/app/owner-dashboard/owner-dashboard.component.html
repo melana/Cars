@@ -1,0 +1,110 @@
+<div class="container pt-5">
+    <h2>Владельцы автомобилей</h2>
+  </div>
+  <div class="container mt-4">
+    <div type="button" class="btn btn-success mx-5" data-bs-toggle="modal" data-bs-target="#Modal"> + Добавить</div>
+    <div class="btn btn-primary mx-2 disabled" disabled>Просмотр</div>
+    <div type="button" class="btn btn-primary mx-5" data-bs-toggle="modal" data-bs-target="#Modal"
+      (click)="onEdit(selected)">Редактировать</div>
+    <div class="btn btn-danger mx-2" (click)="deleteOwner(selected)">Удалить</div>
+  </div>
+  
+  <div class="container mt-4">
+    <table class="table table-fixed" id="mainTable">
+      <thead>
+        <tr>
+          <th scope="col" colspan=1>ID</th>
+          <th scope="col" colspan=3>Фамилия</th>
+          <th scope="col" colspan=3>Имя</th>
+          <th scope="col" colspan=3>Отчество</th>
+          <th scope="col" colspan=2>Количество автомобилей</th>
+  
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let owner of owners$" (click)="rowSelected(owner)" [class.selectedrow]="selected === owner.id">
+          <td colspan=1>{{owner.id}}</td>
+          <td colspan=3>{{owner.aLastName}}</td>
+          <td colspan=3>{{owner.aFirstName}}</td>
+          <td colspan=3>{{owner.aMiddleName}}</td>
+          <td colspan=2>{{owner.aCars.length}}</td>
+        </tr>
+  
+      </tbody>
+    </table>
+  </div>
+  
+
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Детали</h5>
+          <button type="button" id="cancel" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="formValue">
+            <div class="mb-3 row">
+              <label for="aLastName" class="col-sm-2 col-form-label">Фамилия:</label>
+              <div class="col-sm-4">
+                <input type="text" formControlName="aLastName" class="form-control">
+              </div>
+            </div>
+            <div class="mb-3 row">
+              <label for="aFirstName" class="col-sm-2 col-form-label">Имя:</label>
+              <div class="col-sm-4">
+                <input type="text" formControlName="aFirstName" class="form-control">
+              </div>
+            </div>
+            <div class="mb-3 row">
+              <label for="aMiddleName" class="col-sm-2 col-form-label">Отчество:</label>
+              <div class="col-sm-4">
+                <input type="text" formControlName="aMiddleName" class="form-control">
+              </div>
+            </div>
+  
+  
+            <div class="mt-5">
+              <h3>Автомобили</h3>
+              <table class="table-fixed">
+                <thead>
+                  <tr>
+                    <th scope="col" class="col-sm-2">Номер</th>
+                    <th scope="col" class="col-sm-2">Марка</th>
+                    <th scope="col" class="col-sm-2">Модель</th>
+                    <th scope="col" class="col-sm-2">Год</th>
+                    <th scope="col" class="col-sm-2">   </th>
+                  </tr>
+                </thead>
+               
+                <tbody  *ngFor = "let car of $any(aCars).controls; let i = index;" [formGroupName]="carForm">
+                  <tr>
+                    <div [formGroupName]="i" class="col-sm-2">
+                      <td colspan="2"><input type="text" class="form-control" formControlName="aCarName">{{car.aName}}</td>
+                      <td colspan="2"><input type="text" class="form-control" formControlName="aCarBrand">{{car.aNumber}}</td>
+                      <td colspan="2"><input type="text" class="form-control" formControlName="aCarModel">{{car.aModel}}</td>
+                      <td colspan="2"><input type="text" class="form-control" formControlName="aCarYear">{{car.aYear}}</td>
+                      <td colspan="2"class="btn-sm btn-danger">Удалить</td>
+                    </div>
+                  </tr>
+  
+                </tbody>
+              </table>
+              <div class="btn btn-primary mx-3" (click) = "addCar()">+ Добавить автомобиль</div>
+              <div>
+                <div class="btn btn-primary my-5" (click)="postOwnerDetails()">Создать</div>
+                <div class="btn btn-primary my-5" (click)="editOwnerDetails()">Сохранить</div>
+                <div class="btn btn-secondary">Назад</div>
+              </div>
+  
+            </div>
+  
+          </form>
+        </div>
+  
+      </div>
+    </div>
+  </div>
